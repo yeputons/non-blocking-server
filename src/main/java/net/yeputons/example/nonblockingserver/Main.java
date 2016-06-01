@@ -17,7 +17,7 @@ public final class Main {
         switch (type) {
             case "echoer": return Echoer::new;
             case "palindrome": return PalindromeChecker::new;
-            case "priner": return (channel) -> new StringPrinter(channel, "Hello, World!\n");
+            case "printer": return (channel) -> new StringPrinter(channel, "Hello, World!\n");
             case "reader": return StringReader::new;
             default:
                 throw new AssertionError("Invalid client handler type: " + type);

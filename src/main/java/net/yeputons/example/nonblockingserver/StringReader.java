@@ -34,7 +34,7 @@ public class StringReader implements NonBlockingClientHandler {
         }
         if (read == -1 || !buffer.hasRemaining()) {
             int offset = buffer.arrayOffset(); // should probably be zero at all times
-            storage.write(buffer.array(), offset, offset + buffer.position());
+            storage.write(buffer.array(), offset, buffer.position());
             buffer.rewind();
         }
         if (read == -1) {

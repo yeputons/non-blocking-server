@@ -38,11 +38,21 @@ public class PalindromeChecker implements NonBlockingClientHandler {
 
     @Override
     public int onReadable() throws IOException {
-        client.read(buffer);
+        int read;
+        try {
+            read = client.read(buffer);
+        } catch (IOException e) {
+            read = -1;
+        }
+        if (read == -1) {
+            System.out.println("Client probably disconnected, closing channel");
+            client.close();
+            return 0;
+        }
         if (buffer.hasRemaining()) {
             return SelectionKey.OP_READ;
         }
-        String data = new String(buffer.array(), buffer.arrayOffset(), buffer.arrayOffset() + buffer.position());
+        String data = new String(buffer.array(), buffer.arrayOffset(), buffer.position());
         if (stringLength < 0) {
             stringLength = Integer.parseInt(data);
             buffer = ByteBuffer.allocate(stringLength);
