@@ -42,11 +42,13 @@ public class NonBlockingServer implements Runnable {
                     if (selectionKey.isAcceptable()) {
                         // if the event comes from ServerSocketChannel
                         SocketChannel newClientSocket = serverChannel.accept();
-                        newClientSocket.configureBlocking(false);
-                        NonBlockingClientHandler newClient = clientProducer.apply(newClientSocket);
-                        int waitFor = newClient.onAccepted(); // ask client what to wait for
-                        if (waitFor != 0) {
-                            newClientSocket.register(selector, waitFor, newClient); // add to waiting queue
+                        if (newClientSocket != null) {
+                            newClientSocket.configureBlocking(false);
+                            NonBlockingClientHandler newClient = clientProducer.apply(newClientSocket);
+                            int waitFor = newClient.onAccepted(); // ask client what to wait for
+                            if (waitFor != 0) {
+                                newClientSocket.register(selector, waitFor, newClient); // add to waiting queue
+                            }
                         }
                     } else {
                         // if the event comes from one of clients
